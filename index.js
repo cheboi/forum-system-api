@@ -8,6 +8,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
+const randomIDGen = Math.random().toString(36).substring(2, 10);
 const users = [];
 const threadList = [];
 
@@ -32,6 +33,24 @@ app.post("/api/login", async (req, res) => {
   });
 });
 
+app.post("/api/register", async (req, res) => {
+  const { email, username, password } = req.body;
+  const id = randomIDGen();
+  const result = users.filter((user) => {
+    user.email === email && user.password === password;
+  });
+
+  if (result.length === 0) {
+    const newUser = { id, email, username, password };
+    users.push(newUser);
+    return res.json({
+      message: "Account created successfully",
+    });
+  }
+  res.json({
+    error_message: "User already exists",
+  });
+});
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
