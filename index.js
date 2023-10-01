@@ -8,9 +8,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-const randomIDGen = Math.random().toString(36).substring(2, 10);
+const randomIDGen = () => Math.random().toString(36).substring(2, 10);
 const users = [];
-const threadList = [];
+const List = [];
 
 app.get("/api", (req, res) => {
   res.json({
@@ -49,6 +49,23 @@ app.post("/api/register", async (req, res) => {
   }
   res.json({
     error_message: "User already exists",
+  });
+});
+
+app.post("/api/create/thread", async (req, res) => {
+  const { thread, userId } = req.body;
+  let threadId = randomIDGen();
+  List.unshift({
+    id: threadId,
+    title: thread,
+    userId,
+    replies: [],
+    likes: [],
+  });
+
+  res.json({
+    message: "Thread created successfully!",
+    threads: List,
   });
 });
 app.listen(PORT, () => {
