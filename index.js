@@ -68,6 +68,32 @@ app.post("/api/create/thread", async (req, res) => {
     threads: List,
   });
 });
+
+app.get("/api/all/threads", (req, res) => {
+  res.json({
+    threads: List,
+  });
+});
+
+app.post("/api/thread/like", (req, res) => {
+  const { threadId, userId } = req.body;
+  const result = List.filter((thread) => thread.id === threadId);
+  const threadLikes = result[0].likes;
+
+  const authenticateReaction = threadLikes.filter((user) => user === userId);
+
+  if (authenticateReaction.length === 0) {
+    threadLikes.push(userId);
+    return res.json({
+      message: "You have reacted to the post!",
+    });
+  }
+  res.json({
+    err_message: "Tou can only react once!",
+  });
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
