@@ -21,14 +21,18 @@ app.get("/api", (req, res) => {
 // Login
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
-  let result = users.filter((user) => {
-    user.email === email && user.password === password;
-  });
+  // checks if the user exists
+  let result = users.filter(
+    (user) => user.email === email && user.password === password
+  );
+
   if (result.length !== 1) {
-    res.status(403).send("Invalid credentials");
+    return res.json({
+      error_message: "Incorrect credentials",
+    });
   }
   res.json({
-    message: "Login Successful",
+    message: "Login successfully",
     id: result[0].id,
   });
 });
@@ -52,26 +56,26 @@ app.post("/api/register", async (req, res) => {
   });
 });
 
-app.post("/api/create/thread", async (req, res) => {
-  const { thread, userId } = req.body;
+app.post("/api/create/forum", async (req, res) => {
+  const { title, userId } = req.body;
+  console.log({ title });
   let threadId = randomIDGen();
   List.unshift({
     id: threadId,
-    title: thread,
-    userId,
+    t
     replies: [],
     likes: [],
   });
 
   res.json({
     message: "Thread created successfully!",
-    threads: List,
+    forums: List,
   });
 });
 
 app.get("/api/all/threads", (req, res) => {
   res.json({
-    threads: List,
+    forums: List,
   });
 });
 
