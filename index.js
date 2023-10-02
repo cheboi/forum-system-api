@@ -62,7 +62,7 @@ app.post("/api/create/forum", async (req, res) => {
   let threadId = randomIDGen();
   List.unshift({
     id: threadId,
-    t
+    title: title,
     replies: [],
     likes: [],
   });
