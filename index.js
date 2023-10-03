@@ -57,12 +57,13 @@ app.post("/api/register", async (req, res) => {
 });
 
 app.post("/api/create/forum", async (req, res) => {
-  const { title, userId } = req.body;
-  console.log({ title });
+  const { forum, userId } = req.body;
+  console.log(req.body);
   let threadId = randomIDGen();
   List.unshift({
     id: threadId,
-    title: title,
+    title: forum,
+    userId,
     replies: [],
     likes: [],
   });
@@ -73,13 +74,13 @@ app.post("/api/create/forum", async (req, res) => {
   });
 });
 
-app.get("/api/all/threads", (req, res) => {
+app.get("/api/all/forums", (req, res) => {
   res.json({
     forums: List,
   });
 });
 
-app.post("/api/thread/like", (req, res) => {
+app.post("/api/forum/like", (req, res) => {
   const { threadId, userId } = req.body;
   const result = List.filter((thread) => thread.id === threadId);
   const threadLikes = result[0].likes;
@@ -97,7 +98,7 @@ app.post("/api/thread/like", (req, res) => {
   });
 });
 
-app.post("/api/thread/replies", async (req, res) => {
+app.post("/api/forum/replies", async (req, res) => {
   const { id } = req.body;
   const result = List.filter((thread) => thread.id === id);
   res.json({
